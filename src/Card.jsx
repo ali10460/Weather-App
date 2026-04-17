@@ -1,4 +1,4 @@
-import { FaDroplet } from "react-icons/fa6";
+import { FaBolt, FaDroplet, FaSnowflake } from "react-icons/fa6";
 import {
   FaCloud,
   FaCloudRain,
@@ -23,6 +23,24 @@ function Card() {
     setWeather(data);
   };
 
+  const getWeatherIcon = (weatherType) => {
+    switch (weatherType) {
+      case "Clear":
+        return <FaSun size={50} className="m-7.5 w-75" />;
+
+      case "Clouds":
+        return <FaCloudSun size={50} className="m-7.5 w-75" />;
+
+      case "Rain":
+        return <FaCloudRain size={50} className="m-7.5 w-75" />;
+
+      case "Snow":
+        return <FaSnowflake size={50} className="m-7.5 w-75" />;
+
+      default:
+        return <FaSun size={50} className="m-7.5 w-75" />;
+    }
+  };
 
   return (
     <div className="card w-[90%] max-w-117.5 bg-linear-to-t from-green-700 to-blue-400 text-white mt-10 mx-auto mb-0 rounded-3xl p-10 text-center">
@@ -43,16 +61,15 @@ function Card() {
         </button>
       </div>
 
-      <div className={ `error text-left ml-3.5 mt-3 text-red-700 hidden`}>
+      <div className={`error text-left ml-3.5 mt-3 text-red-700 hidden`}>
         <p>Ivalid city name</p>
       </div>
 
       {weather && weather.main && (
         <div className="weather">
-          <FaSun size={50} className="m-7.5 w-75" />
-          <FaCloudRain size={50} className="m-7.5 w-75" />
-          <FaCloudSun size={50} className="m-7.5 w-75" />
-          <FaCloudSun size={50} className="m-7.5 w-75" />
+
+          {getWeatherIcon(weather.weather[0].main)}
+
           <h1 className="temp text-8xl font-semibold">
             {Math.round(weather.main.temp)}°c
           </h1>
