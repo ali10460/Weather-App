@@ -1,6 +1,5 @@
-import { FaBolt, FaDroplet, FaSnowflake } from "react-icons/fa6";
+import { FaDroplet, FaSnowflake } from "react-icons/fa6";
 import {
-  FaCloud,
   FaCloudRain,
   FaCloudSun,
   FaSearch,
@@ -12,6 +11,7 @@ import { useState } from "react";
 function Card() {
   const [city, setCity] = useState("");
   const [weather, setWeather] = useState(null);
+  const [error, setError] = useState("");
 
   const getWeather = async () => {
     const apiKey = "57b68b503b376c16d0d3b7e42e9e298f";
@@ -43,59 +43,69 @@ function Card() {
   };
 
   return (
-    <div className="card w-[90%] max-w-117.5 bg-linear-to-t from-green-700 to-blue-400 text-white mt-10 mx-auto mb-0 rounded-3xl p-10 text-center">
-      <div className="search w-full flex justify-center items-center">
-        <input
-          type="text"
-          placeholder="Enter city name"
-          spellCheck="false"
-          value={city}
-          onChange={(e) => setCity(e.target.value)}
-          className="border-0 outline-0 bg-white text-[#555] py-2.5 px-6 rounded-full h-16 flex-1 mr-4 text-xl"
-        />
-        <button
-          onClick={getWeather}
-          className="w-15 h-15 border-0 bg-white cursor-pointer rounded-full"
-        >
-          <FaSearch size={25} color="black" className="w-8 mx-auto" />
-        </button>
-      </div>
+    <div className="min-h-screen flex items-center justify-center relative overflow-hidden bg-black">
+      <div className="absolute w-125 h-125 bg-purple-500 rounded-full blur-[120px] -top-50 -left-25 opacity-40"></div>
+      <div className="absolute w-125 h-125 bg-blue-500 rounded-full blur-[120px] -bottom-25 -right-25 opacity-40"></div>
 
-      <div className={`error text-left ml-3.5 mt-3 text-red-700 hidden`}>
-        <p>Ivalid city name</p>
-      </div>
+      <div className=" card backdrop-blur-lg bg-white/10 border border-white/20 shadow-2xl rounded-3xl p-8 w-[90%] max-w-md text-white">
+        {/* Search */}
+        <div className="flex items-center gap-3">
+          <input
+            type="text"
+            placeholder="Enter city..."
+            value={city}
+            onChange={(e) => setCity(e.target.value)}
+            className="flex-1 px-5 py-3 rounded-full bg-white/20 placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white"
+          />
+          <button
+            onClick={getWeather}
+            className="bg-white text-black p-3 rounded-full hover:scale-110 transition duration-300 cursor-pointer"
+          >
+            <FaSearch />
+          </button>
+        </div>
 
-      {weather && weather.main && (
-        <div className="weather">
+        {/* Error */}
+        {error && <p className="text-red-400 mt-4 text-sm">{error}</p>}
 
-          {getWeatherIcon(weather.weather[0].main)}
-
-          <h1 className="temp text-8xl font-semibold">
-            {Math.round(weather.main.temp)}°c
-          </h1>
-          <h2 className="city text-4xl font-semibold">{weather.name}</h2>
-
-          <div className="details flex items-center justify-between py-0 px-5 mt-20">
-            <div className="col flex items-center text-center">
-              <FaDroplet size={45} className="mr-2" />
-              <div>
-                <p className="humidity text-3xl -mt-2">
-                  {weather.main.humidity}%
-                </p>
-                <p>Humidity</p>
-              </div>
+        {/* Weather Info */}
+        {weather && weather.main && (
+          <div className="mt-8 text-center">
+            <div className="flex justify-center mb-4">
+              {getWeatherIcon(weather.weather[0].main)}
             </div>
 
-            <div className="col flex items-center text-center">
-              <FaWind size={45} className="mr-2" />
-              <div>
-                <p className="wind text-3xl -mt-2">{weather.wind.speed} km/h</p>
-                <p>Wind Speed</p>
+            <h1 className="text-6xl font-bold">
+              {Math.round(weather.main.temp)}°C
+            </h1>
+
+            <h2 className="text-2xl mt-2 opacity-80">{weather.name}</h2>
+
+            {/* Details */}
+            <div className="flex justify-between mt-8 bg-white/10 p-4 rounded-xl">
+              <div className="flex items-center gap-3">
+                <FaDroplet size={30} />
+                <div>
+                  <p className="text-xl font-semibold">
+                    {weather.main.humidity}%
+                  </p>
+                  <p className="text-sm opacity-70">Humidity</p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-3">
+                <FaWind size={30} />
+                <div>
+                  <p className="text-xl font-semibold">
+                    {weather.wind.speed} km/h
+                  </p>
+                  <p className="text-sm opacity-70">Wind</p>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 }
